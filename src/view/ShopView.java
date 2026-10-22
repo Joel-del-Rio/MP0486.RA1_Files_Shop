@@ -10,6 +10,7 @@ import main.Shop;
 import utils.Constants;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
@@ -30,6 +31,7 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 	private JButton btnAddProduct;
 	private JButton btnAddStock;
 	private JButton btnRemoveProduct;
+	private JButton btnExportInvetory;
 	
 	
 	
@@ -85,29 +87,38 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 		lblShowCash.setBounds(57, 20, 236, 14);
 		contentPane.add(lblShowCash);
 		
+		btnExportInvetory = new JButton("0. Exportar invetario");
+		btnExportInvetory.setHorizontalAlignment(SwingConstants.LEFT);
+		btnExportInvetory.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnExportInvetory.setBounds(99, 40, 236, 40);
+		contentPane.add(btnExportInvetory);
+		// listen button
+		btnExportInvetory.addActionListener(this);
+		
+		
 		// option count cash
 		btnShowCash = new JButton("1. Contar caja");
 		btnShowCash.setHorizontalAlignment(SwingConstants.LEFT);
 		btnShowCash.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnShowCash.setBounds(99, 40, 236, 40);
+		btnShowCash.setBounds(99, 90, 236, 40);
 		contentPane.add(btnShowCash);
 		// listen button
 		btnShowCash.addActionListener(this);
-		
+				
 		// option add product
 		btnAddProduct = new JButton("2. Añadir producto");
 		btnAddProduct.setHorizontalAlignment(SwingConstants.LEFT);
 		btnAddProduct.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnAddProduct.setBounds(99, 90, 236, 40);
+		btnAddProduct.setBounds(99, 140, 236, 40);
 		contentPane.add(btnAddProduct);
 		// listen button
 		btnAddProduct.addActionListener(this);
-		
+				
 		// option add stock
 		btnAddStock = new JButton("3. Añadir stock");
 		btnAddStock.setHorizontalAlignment(SwingConstants.LEFT);
 		btnAddStock.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnAddStock.setBounds(99, 140, 236, 40);
+		btnAddStock.setBounds(99, 190, 236, 40);
 		contentPane.add(btnAddStock);
 		// listen button
 		btnAddStock.addActionListener(this);
@@ -116,7 +127,7 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 		btnRemoveProduct = new JButton("9. Eliminar producto");
 		btnRemoveProduct.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRemoveProduct.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnRemoveProduct.setBounds(99, 190, 236, 40);
+		btnRemoveProduct.setBounds(99, 240, 236, 40);
 		contentPane.add(btnRemoveProduct);
 		// listen button
 		btnRemoveProduct.addActionListener(this);
@@ -132,6 +143,9 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyChar() == '0') {
+			this.exportInvetoryBool();
+		}
 		if (e.getKeyChar() == '1' ) {
 			this.openCashView();	
         }
@@ -168,6 +182,9 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 		if (e.getSource() == btnRemoveProduct) {
 			this.openProductView(Constants.OPTION_REMOVE_PRODUCT);				
 		}
+		if (e.getSource() == btnExportInvetory) {
+			this.exportInvetoryBool();
+		}
 		
 	}
 	
@@ -196,6 +213,21 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
         dialog.setModal(true);
         dialog.setVisible(true);
 	}
+	
+	public void exportInvetoryBool() {
+		// ask shop to write the inventory through its dao
+		boolean exported = shop.writeInventory();
+
+		if (exported) {
+			JOptionPane.showMessageDialog(this, "Inventario exportado correctamente", "Exportar inventario",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(this, "No se ha podido exportar el inventario", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	
 	
 	
 }
